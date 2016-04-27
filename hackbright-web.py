@@ -11,10 +11,16 @@ def get_student():
 
     github = request.args.get('github', 'jhacks')
     first, last, github = hackbright.get_student_by_github(github)
+    grades = hackbright.get_grades_by_github(github)
+
+    print grades, 'NOW!'
+
+
     html = render_template("student_info.html",
                            first=first,
                            last=last,
-                           github=github)
+                           github=github,
+                           grades=grades)
     return html
 
 @app.route("/student-search")
@@ -42,18 +48,6 @@ def student_add():
                             first=first,
                             last=last,
                             github=github)
-
-@app.route("/student_grade_title")
-def student_grade_title():
-    """Lists project title with grade"""
-
-    title = request.args.get('title', 'blockly')
-    # student_github, grade, title < parts from unpacking hackbright.get_grades_by_title
-    results = hackbright.get_grades_by_title(title)
-
-    #do not unpack the results from hackbright.get_grades_by_title here
-    #save tuples as a variable (ex: 'results') to loop through in student_info.html
-
 
 if __name__ == "__main__":
     hackbright.connect_to_db(app)
